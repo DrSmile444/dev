@@ -1,0 +1,21 @@
+body,
+.results {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.search__options,
+.search__input {
+    padding: 5px;
+}
+
+.search__options {
+    margin-left: 10px;
+}
+
+.results * {
+    margin-top: 15px;
+    width: 100%;
+}
