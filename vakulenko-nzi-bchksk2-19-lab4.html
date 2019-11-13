@@ -1,0 +1,120 @@
+<input type="text" id="input" placeholder="Input text..." value="Maria Viacheslavovna"/>
+<p id="resultexact"></p>
+<pre id="resultnode">Made by Dmytro Vakulenko, 2019<br>Input your text in the input</pre>
+
+<script type="text/javascript">
+	const p = 11;
+	const q = 3;
+
+	const d = 7;
+	let e, N;
+
+	const newMap = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", ' ', ',', ':', '.', ';', '!', '?'];
+
+	input.oninput = (event) => {
+		rsaEngine(event.target.value);
+	}
+
+	rsaEngine('Maria Viacheslavovna');
+
+	function rsaEngine(userInput) {
+		const adaptedInput = userInput
+			.toLowerCase()
+			.split('')
+			.map(symbol => newMap.indexOf(symbol))
+			.join(' ');
+
+		const encryptedAdaptedInput = adaptedInput
+			.split(' ')
+			.map(symbol => encryptRSA(symbol))
+			.join(' ');
+
+		const encryptedInput = encryptedAdaptedInput
+			.split(' ')
+			.map(symbol => newMap[symbol])
+			.join('')
+
+		const decryptedAdaptedInput = encryptedInput
+			.split('')
+			.map(symbol => newMap.indexOf(symbol))
+			.join(' ');
+
+		const decryptedInput = decryptedAdaptedInput
+			.split(' ')
+			.map(symbol => decryptRSA(symbol))
+			.join(' ');
+
+		const result = decryptedInput
+			.split(' ')
+			.map(symbol => newMap[symbol])
+			.join('');
+
+		resultexact.innerText = encryptedInput;
+
+		resultnode.innerText = 
+			'Made by Dmytro Vakulenko, 2019\nInput your text in the input' +
+			'\n' +
+			'\n' +
+			JSON.stringify({ p, q, d, e, N }, '', '  ') +
+			'\n' +
+			JSON.stringify({ adaptedInput, encryptedAdaptedInput, decryptedAdaptedInput, decryptedInput }, '', '  ') +
+			'\n' +
+			JSON.stringify({ userInput, encryptedInput, result }, '', '  ')
+	}
+
+
+	function encryptRSA(symbol) {
+		N = p * q;
+		const M = (p - 1) * (q - 1);
+
+		const ed = 1 % M;
+
+		for (let i = 2; !e; i++) {
+			const isPrimeNumber = isPrime(i);
+
+			if (!isPrimeNumber) continue;
+
+			let isValid = i * d % M === 1;
+
+			if (isValid) {
+				e = i;
+				break;
+			}
+		}
+
+		// d and N are public keys
+		// e and N are private keys
+
+		const S = +symbol;
+		const isSValid = 1 < S.length && S.length < N;
+
+		const SEncrypted = S ** d % N;
+
+		const SDecrypted = SEncrypted ** e % N;
+
+		return SEncrypted;
+	}
+
+	function decryptRSA(symbol) {
+		return symbol ** e % N;
+	}
+
+	function isPrime(num) {
+	    for ( var i = 2; i < num; i++ ) {
+	        if ( num % i === 0 ) {
+	            return false;
+	        }
+	    }
+	    return true;
+	}
+
+	function display(n) {
+	    var arr = [2];
+	    for ( var i = 3; i < n; i+=2 ) {
+	        if ( isPrime(i) ) {
+	            arr.push(i);
+	        }
+	    }
+	    console.log(arr); // use arr result on your own
+	}
+</script>
